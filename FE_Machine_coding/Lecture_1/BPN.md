@@ -40,3 +40,27 @@ you can convert an a _NodeList_ or an _HTMLCollection_ into an array by doing Ar
 - InnerText will only show what is visible
 - InnerContent will show all content
 - InnerContent is readonly.. I think 
+
+### createDocumentFragment
+
+ - its not good to constantly add appendChild multiple times.  it is better to use fragment 
+ ```js
+// bad solution
+        for (let i = 0; i < 1000; i++) {
+            const li = document.createElement("li");
+            // 2. add attributes
+            li.textContent = "task elemns"
+            // add all the element in a batch
+            ul.appendChild(li);
+        }
+
+        // optimized version
+         let fragment = document.createDocumentFragment();
+            for (let i = 0; i < 10000; i++) {
+                const li = document.createElement("li");
+                li.textContent = `I am ${i + 1}`;
+                fragment.appendChild(li);
+            }
+            // 1 re-render will be required 
+            ul.appendChild(fragment);
+ ```
