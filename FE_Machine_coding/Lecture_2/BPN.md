@@ -10,8 +10,8 @@
 ## node.addEventListener fn
 
 - the name of the event [string]
-  - the events here are usually existing events in WebAPIs used in the browser, but you can make your own as well. 
-- the callback function 
+  - the events here are usually existing events in WebAPIs used in the browser, but you can make your own as well.
+- the callback function
 - settings object (which is optional)
   - the settings object useful for attribtues like _once_ which will make sure that the even runs once
 
@@ -41,13 +41,13 @@
   </div>
 ```
 
-- It's bad practice to stop propagation of events but its done with the stopPropagation() method of event. 
+- It's bad practice to stop propagation of events but its done with the stopPropagation() method of event.
 - I believe that stopImmediatePropagation() stops any parent handlers but stopPropagation stops the ancestor
 
 ### e.target vs e.curentTarget
 
-e.target is the source element that started the event.  e.currentTarget is where the event has been propagated to. 
+e.target is the source element that started the event.  e.currentTarget is where the event has been propagated to.
 
 ### event delegation
 
-it's a pattern when you use one prevent listener and only assign it to parent eleements to avoid having multiple event listeners. 
+it's a pattern when you use one prevent listener and only assign it to parent eleements to avoid having multiple event listeners.
