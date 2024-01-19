@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import useFetchList from '../Hooks/useFetchList';
-import Product from './Components/Product';
+import useFetchList from '../../Hooks/useFetchList';
+import Product from '../Components/Product';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
+import Categories from '../Components/Categories';
+import Pagination from '../Components/Pagination';
 const productsUrl = `https://fakestoreapi.com/products`
 const categoriesUrl = `https://fakestoreapi.com/products/categories`;
 
@@ -33,7 +35,7 @@ function Home() {
      * 1. state variable -> listing all the products
      * 2.  how should i get the products : 
      * **/
-    
+
     // custom Hook
     const [productList, productLoader, setProductList] = useFetchList(productsUrl);
     // reused the custom hook
@@ -41,7 +43,8 @@ function Home() {
     const [searchTerm, setSearchTerm] = useState("");
     /**************************sort : 0 : unsorted , 1: increasing order , -1 : decreasing order ************************************/
     const [sortDir, setsortDir] = useState(0);
-
+    /**************************** currcategory : category group you result **********************************/
+    const [currCategory, setCurrCategory] = useState("All categories");
     const deleteProduct = (cId) => {
         const restOfProducts = productList.filter((product) => {
             return cId != product.id;
@@ -93,7 +96,13 @@ function Home() {
             sortedList.sort(decComparator);
         }
     }
-
+    /**************************categorization**********************************************/
+    let filteredSortedgroupByArr = sortedList;
+    if (currCategory != "All categories") {
+        filteredSortedgroupByArr = filteredSortedgroupByArr.filter((product) => {
+            return product.category == currCategory;
+        })
+    }
 
 
     return (
@@ -125,28 +134,18 @@ function Home() {
                         ></ArrowCircleDownIcon>
                     </div>
                 </div>
-                <div className="categories_wrapper">
-
-                    {categoryLoader == true ? <h1>...Loading</h1> :
-                        <main className="product_wrapper">
-                            <>{categoryList.length == 0 ? <h1>Nothing here</h1> :
-                                <>{
-                                    categoryList.map((category, idx) => {
-                                        return <button className="category_option" key={idx}
-                                        > {category}</button>
-                                    })
-                                }</>
-                            }</>
-                        </main>
-                    }
-                </div>
+                <Categories
+                    categoryLoader={categoryLoader}
+                    categoryList={categoryList}
+                    setCurrCategory={setCurrCategory}
+                ></Categories>
 
             </header>
             {productLoader == true ? <h1>...Loading</h1> :
                 <main className="product_wrapper">
-                    <>{sortedList.length == 0 ? <h1>Nothing here</h1> :
+                    <>{filteredSortedgroupByArr.length == 0 ? <h1>Nothing here</h1> :
                         <>{
-                            sortedList.map((product, idx) => {
+                            filteredSortedgroupByArr.map((product, idx) => {
                                 return (<Product
                                     product={product}
                                     deleteProduct={deleteProduct}
@@ -156,6 +155,8 @@ function Home() {
                     }</>
                 </main>
             }
+
+            <Pagination></Pagination>
         </>
 
 
@@ -193,7 +194,7 @@ export default Home;
  * }
  * },[sterm,sortTerm,categories])
 //  pagination, 
- * */ 
+ * */
 
 /****
  * if you a child componnet  -> update conditional -> huge 
